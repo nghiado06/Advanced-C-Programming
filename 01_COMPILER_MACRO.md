@@ -31,8 +31,8 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         #endif
         printf("Đây là dòng code dưới dòng code trong file.h");
         ````
-  `
-        - **Delete Comment**: Xóa đi các dòng comment
+- 
+        **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
         #Dòng này sẽ bị xóa
@@ -41,19 +41,19 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
         ````
-  `
-        - **Expand Macro**
+- 
+        **Expand Macro**
         ```c
-file.c
-#define LED 17
-#define BUZZER 16
+        file.c
+        #define LED 17
+        #define BUZZER 16
 
-digitalWrite(LED, HIGH);
-digitalWrite(BUZZER, LOW);
+        digitalWrite(LED, HIGH);
+        digitalWrite(BUZZER, LOW);
 
-file.i
-digitalWrite(17, HIGH);
-digitalWrite(16, LOW);
+        file.i
+        digitalWrite(17, HIGH);
+        digitalWrite(16, LOW);
         ````
 
     - ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
