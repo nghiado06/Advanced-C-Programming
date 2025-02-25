@@ -109,6 +109,8 @@ int main(){
     int a = 10, b = 20;
     int max_number = Max(a,b);
     printf("%d", max_number);
+
+    return 0;
 }
 ````
 ouput
@@ -126,6 +128,8 @@ int main(){
     printf("%d\n", SENSOR);
     #define SENSOR 50
     printf("%d\n", SENSOR);
+
+    return 0;
 }
 ````
 ouput
@@ -147,9 +151,117 @@ int main(){
         codeblock;
     #else
         codeblock;
+
+    return 0;
 }
 ````
-
+### #ifdef #ifndef
+- Chỉ thị #ifdef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro đã được định nghĩa thì mã nguồn sau #ifdef sẽ được biên dịch.
+- Chỉ thị #ifndef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro chưa được định nghĩa thì mã nguồn sau #ifndef sẽ được biên dịch
+```c
+#include <stdio.h>
+#define TEST1 1
+#ifdef TEST1
+printf("Đã được định nghĩa\n");
+#endif
+#ifndef TEST2
+printf("Chưa được định nghĩa");
+#endif
+````
+output
+```
+Đã được định nghĩa
+Chưa được định nghĩa
+````
 ## B. Một số toán tử trong Macro
+### 1. Toán tử #
+Toán tử # dùng để biến 1 giá trị thành 1 chuỗi ký tự. Nhưng hết sức lưu ý khi dùng toán tử #, vì khi dùng # cho 1 macro thì macro đó sẽ không được mở rộng trước khi đưa vào toán tử #. <br>
+Lấy ví dụ:
+```c
+#include <stdio.h>
 
+#define A 10
+#define STRINGIZE(x) #x
 
+int main(){
+    print("%s\n", STRINGIZE(A));
+    return 0;
+}
+````
+output
+```
+A
+````
+Khi này output nó sẽ là A vì A chưa được mở rộng khi gặp toán #, do đó cần một Macro trung gian để trình biên dịch hiểu rằng đó không phải là toán tử # và Macro A có thể được mở rộng.
+```c
+#include <stdio.h>
+
+#define A 10
+#define BeforeStringize(x) STRINGIZE(x)
+#define STRINGIZE(x) #x
+
+int main(){
+    print("%s\n", BeforeStringize(A));
+    return 0;
+}
+````
+output
+```
+"10"
+````
+### 2. Toán tử ##
+Toán tử ## dùng để nối chuỗi
+```c
+#include <stdio.h>
+
+#define NOICHUOI(a,b) a##b
+
+int main(){
+    int AB = 1;
+    printf("%d", NOICHUOI(A,B));
+    return 0;
+}
+````
+output
+```
+1
+````
+### 3. Toán tử varadic macro
+- Là một dạng macro cho phép nhận một số lượng biến tham số có thể thay đổi.
+- Giúp định nghĩa các macro có thể xử lý một lượng biến đầu vào khác nhau
+- Có cú pháp là #define macro_name(...) expansion
+#### Ví dụ cơ bản
+```c
+#include <stdio.h>
+
+#define PRINT(...) printf(__VA_ARGS__)
+
+int main() {
+    PRINT("Hello, World!\n");
+    PRINT("Number: %d\n", 42);
+
+    return 0;
+}
+
+````
+output
+```
+Hello, World!
+Number: 42
+````
+#### Thêm tiền tố hoặc hậu tố
+```c
+#include <stdio.h>
+
+#define PRINT(tag,...) printf("[%s] ", tag), printf(__VA_ARGS__)
+
+int main(){
+    PRINT("INFO", "Hello World" );
+
+    return 0;
+}
+````
+output
+```
+[INFO] Hello World
+````
