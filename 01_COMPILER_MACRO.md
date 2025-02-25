@@ -13,54 +13,37 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     ````
     Quá trình này bao gồm các công việc:<br>
         - **Include Header**: Tìm kiếm và chèn mã nguồn
-          ```c
-          Ex.h (Ví dụ cho file.h)
-          #ifdef EX_H
-          #define EX_H
-          printf("Đây là file.h");
-          #endif
-  
-          file.c (Ví dụ cho file.c)
-          #include "Ex.h"
-          printf("Đây là dòng code dưới dòng code trong file.h");
-  
-          file.i (Quá trình preprocessing sẽ biên dịch từ file.c sang file.i như sau)
-          #ifdef EX_H
-          #define EX_H
-          printf("Đây là file.h");
-          #endif
-          printf("Đây là dòng code dưới dòng code trong file.h");
-          ````
-          - **Delete Comment**: Xóa đi các dòng comment
+        ```c
+        Ex.h (Ví dụ cho file.h)
+        #ifdef EX_H
+        #define EX_H
+        printf("Đây là file.h");
+        #endif
+        
+        file.c (Ví dụ cho file.c)
+        #include "Ex.h"
+        printf("Đây là dòng code dưới dòng code trong file.h");
+        
+        file.i (Quá trình preprocessing sẽ biên dịch từ file.c sang file.i như sau)
+        #ifdef EX_H
+        #define EX_H
+        printf("Đây là file.h");
+        #endif
+        printf("Đây là dòng code dưới dòng code trong file.h");
+        ````
+  `
+        - **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
         #Dòng này sẽ bị xóa
         printf("Dòng code này thì không bị xóa");
-
+  
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
         ````
-
-    - ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
-    - ****Assemble****: Chuyển file.s sang file.o;.obj, chuyển sang ngôn ngữ máy (Mã nhị phân)
-    - ****Linking****: Gom tất cả các file.o lại với nhau để chuyển thành file thực thi .exe
-
-
-Cú pháp để thực hiện quá trình trong terminal (IDE VScode) như sau:
-Compiler:
-gcc -S file.i -o file.s
-Assemble:
-gcc -c file.s -o file.o
-Linking:
-gcc file1.o file2.o -o name.exe
-
-
-
-
-
-````
--    **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
-```c
+  `
+        - **Expand Macro**
+        ```c
 file.c
 #define LED 17
 #define BUZZER 16
@@ -71,6 +54,24 @@ digitalWrite(BUZZER, LOW);
 file.i
 digitalWrite(17, HIGH);
 digitalWrite(16, LOW);
-``` 
+        ````
 
+    - ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
+    ```
+    Cú pháp để thực hiện quá trình trong terminal (IDE VScode) như sau:
+    gcc -S file.i -o file.s
+    ````
+    - ****Assemble****: Chuyển file.s sang file.o;.obj, chuyển sang ngôn ngữ máy (Mã nhị phân)
+    ```
+    Cú pháp để thực hiện quá trình trong terminal (IDE VSCode) như sau:
+    gcc -c file.s -0 file.o
+    ````
+    - ****Linking****: Gom tất cả các file.o lại với nhau để chuyển thành file thực thi .exe
+    ```
+    Cú pháp để thực hiện quá trình trong terminal (IDE VSCode) như sau:
+    gcc file1.o file2.o 0o name.exe (name tùy ý)
+    ````
+
+
+-    **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
 # Macros
