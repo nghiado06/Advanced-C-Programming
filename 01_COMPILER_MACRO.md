@@ -6,9 +6,20 @@ Macro là gì? Ý nghĩa của Macro ứng với quá trình compile và code.
 Compiler có thể hiểu đơn giản là trình biên dịch, là một chương trình dịch (compile) một mã nguồn từ ngôn ngữ lập trình cấp cao (C++, C, Java,..) sang ngôn ngữ máy (Machine Language) để CPU, máy tính có thể hiểu được. 
 ### B. Quá trình compile (Compiler Process)
 - Quá trình compile sẽ bao gồm các bước sau:
-- ****Preprocessing**** (Tiền xử lý): Quá trình sẽ chuyển các file (.c;.cpp;.h) sang file .i với cú pháp trong terminal: <br>
-```c
+-     ****Preprocessing**** (Tiền xử lý): Quá trình sẽ chuyển các file (.c;.cpp;.h) sang file .i: <br>
+-     ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
+-     ****Assemble****: Chuyển file.s sang file.o;.obj, chuyển sang ngôn ngữ máy (Mã nhị phân)
+-     ****Linking****: Gom tất cả các file.o lại với nhau để chuyển thành file thực thi .exe
+```
+Cú pháp để chuyển đối quá trình trong terminal (IDE VSCode) như sau:
+Preprocessing:
 gcc -E file.c -o file.i
+Compiler:
+gcc -S file.i -o file.s
+Assemble:
+gcc -c file.s -o file.o
+Linking:
+gcc file1.o file2.o -o name.exe
 ```
 
 Quá trình này bao gồm các công việc:<br>
