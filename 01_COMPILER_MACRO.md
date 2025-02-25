@@ -110,7 +110,7 @@ int main(){
     printf("%d", max_number);
 }
 ````
-```output
+```output:title=output
 20
 ````
 
