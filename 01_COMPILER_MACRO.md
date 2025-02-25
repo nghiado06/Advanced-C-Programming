@@ -12,7 +12,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     gcc -E file.c -o file.i
     ````
     Quá trình này bao gồm các công việc:<br>
-    * **Include Header**: Tìm kiếm và chèn mã nguồn
+    >* **Include Header**: Tìm kiếm và chèn mã nguồn
         ```c
         Ex.h (Ví dụ cho file.h)
         #ifndef EX_H
@@ -32,7 +32,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         printf("Đây là dòng code dưới dòng code trong file.h");
         ````
 
-    * **Delete Comment**: Xóa đi các dòng comment
+    >* **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
         // Dòng này sẽ bị xóa
@@ -41,7 +41,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
         ````
-    * **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
+    >* **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
         ```c
         file.c
         #define LED 17
@@ -136,6 +136,18 @@ ouput
 ### #if #elif #else
 Các chỉ thị này cũng tương tự với if, else, elif trong C nhưng khác ở chỗ nó dành để kiểm tra macro.
 ```c
+#include <stdio.h>
+#define MCU STM32
+
+//Kiểm tra bằng các macro điều kiện
+int main(){
+    #if MCU = STM32
+        codeblock;
+    #elif MCU = ESP32
+        codeblock;
+    #else
+        codeblock;
+}
 ````
 
 ## B. Một số toán tử trong Macro
