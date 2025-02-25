@@ -11,8 +11,8 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
 gcc -E file.c -o file.i
 ```
 
-Quá trình này bao gồm các công việc:
-    -     **Include Header**: Tìm kiếm và chèn mã nguồn
+Quá trình này bao gồm các công việc:<br>
+-    **Include Header**: Tìm kiếm và chèn mã nguồn
 
     
 ```c
