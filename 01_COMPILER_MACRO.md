@@ -70,12 +70,14 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     gcc file1.o file2.o 0o name.exe (name tùy ý)
     ````
 
-# Macros
-## 1. Định nghĩa
+# 2. Macros
+## A. Định nghĩa
 Macro là từ dùng để chỉ những thôn tin được xử lý ở quá trình tiền xử lý (Preprocessor).<br>
 Chia làm 3 nhóm chính:<br>
 - #include
 - #define, #undef
 - #if, #elif, #else, #ifdef, #ifndef
+
+## B. Một số toán tử trong Macro
 
 
