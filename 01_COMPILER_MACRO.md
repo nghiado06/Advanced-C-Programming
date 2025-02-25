@@ -35,6 +35,26 @@ printf("Đây là dòng code dưới dòng code trong file.h");
 ```
 
 -    **Delete Comment**: Xóa đi các dòng comment
--    **Expand Macro**: Thay thế các macro 
+```c
+file.c
+#Dòng này sẽ bị xóa
+printf("Dòng code này thì không bị xóa");
+
+file.i (Khi này file.i sẽ không còn dòng commnent nữa)
+printf("Dòng code này thì không bị xóa");
+```
+-    **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
+```c
+file.c
+#define LED 17
+#define BUZZER 16
+
+digitalWrite(LED, HIGH);
+digitalWrite(BUZZER, LOW);
+
+file.i
+digitalWrite(17, HIGH);
+digitalWrite(16, LOW);
+``` 
 
 # Macros
