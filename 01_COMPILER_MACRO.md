@@ -34,7 +34,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         - **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
-        #Dòng này sẽ bị xóa
+        // Dòng này sẽ bị xóa
         printf("Dòng code này thì không bị xóa");
   
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
@@ -77,6 +77,44 @@ Chia làm 3 nhóm chính:<br>
 - #include
 - #define, #undef
 - #if, #elif, #else, #ifdef, #ifndef
+### #include
+Chỉ thị #include dùng để chèn nội dụng của 1 file nào đó vào mã nguồn của chương trình
+- Tái sử dụng mã nguồn
+- Phân chia chương trình thành các phần nhỏ, giúp quản lý mã nguồn hiệu quả
+```c
+#include <stdio.h> (Chèn nội dung của file stdio này vào mã nguồn chương trình chính)
+
+int main()
+{
+    code block;
+}
+````
+### #define
+- Dùng để thay thế một chuỗi bằng 1 chuỗi khác trước khi chương trình biên dịch
+```c
+#define PI 3.14
+
+printf("%d", PI);
+
+Khi biên dịch sang file.i sẽ chuyển thành
+printf("%d", 3.14);
+
+Tương tự:
+#include <stdio.h>
+
+#define Max(x,y) ((x) > (y) ? (x) : (y))
+
+int main(){
+    int a = 10, b = 20;
+    int max_number = Max(a,b);
+    printf("%d", max_number);
+}
+````
+```output
+20
+````
+
+### #undef
 
 ## B. Một số toán tử trong Macro
 
