@@ -9,7 +9,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     - ****Preprocessing**** (Tiền xử lý): Quá trình sẽ chuyển các file (.c;.cpp;.h) sang file .i với cú pháp trong terminal: <br>
 ```c
 gcc -E file.c -o file.i
-
+```
 
     Quá trình này bao gồm các công việc:
     -     **Include Header**: Tìm kiếm và chèn mã nguồn
