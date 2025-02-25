@@ -11,8 +11,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
 gcc -E file.c -o file.i
 ```
 
-
-    Quá trình này bao gồm các công việc:
+Quá trình này bao gồm các công việc:
     -     **Include Header**: Tìm kiếm và chèn mã nguồn
 
     
@@ -33,8 +32,7 @@ printf("Đây là file.h");
 printf("Đây là dòng code dưới dòng code trong file.h");
 ```
 
-
-    -     **Delete Comment**: Xóa đi các dòng comment
-    -     **Expand Macro**: Thay thế các macro 
+-    **Delete Comment**: Xóa đi các dòng comment
+-    **Expand Macro**: Thay thế các macro 
 
 # Macros
