@@ -31,7 +31,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         #endif
         printf("Đây là dòng code dưới dòng code trong file.h");
         ````
-  `
+
         - **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
@@ -111,12 +111,28 @@ int main(){
     printf("%d", max_number);
 }
 ````
+ouput
 ```
 20
 ````
 
 ### #undef
-
+Chỉ thị #undef dùng để hủy định nghĩa của một macro đã được định nghĩa bằng #define trước đó.
+```c
+#include <stdio.h>
+#define SENSOR 21
+int main(){
+    #undef SENSOR
+    printf("%d\n", SENSOR);
+    #define SENSOR 50
+    printf("%d\n", SENSOR);
+}
+````
+ouput
+```
+21
+50
+````
 ## B. Một số toán tử trong Macro
 
 
