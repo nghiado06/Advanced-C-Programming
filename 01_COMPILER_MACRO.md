@@ -15,7 +15,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         - **Include Header**: Tìm kiếm và chèn mã nguồn
         ```c
         Ex.h (Ví dụ cho file.h)
-        #ifdef EX_H
+        #ifndef EX_H
         #define EX_H
         printf("Đây là file.h");
         #endif
@@ -31,8 +31,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         #endif
         printf("Đây là dòng code dưới dòng code trong file.h");
         ````
-- 
-        **Delete Comment**: Xóa đi các dòng comment
+        - **Delete Comment**: Xóa đi các dòng comment
         ```c
         file.c
         #Dòng này sẽ bị xóa
@@ -41,8 +40,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
         ````
-- 
-        **Expand Macro**
+        **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
         ```c
         file.c
         #define LED 17
@@ -72,6 +70,12 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     gcc file1.o file2.o 0o name.exe (name tùy ý)
     ````
 
-
--    **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
 # Macros
+## 1. Định nghĩa
+Macro là từ dùng để chỉ những thôn tin được xử lý ở quá trình tiền xử lý (Preprocessor).<br>
+Chia làm 3 nhóm chính:<br>
+- #include
+- #define, #undef
+- #if, #elif, #else, #ifdef, #ifndef
+
+
