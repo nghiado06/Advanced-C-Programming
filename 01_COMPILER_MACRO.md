@@ -174,7 +174,7 @@ output
 Chưa được định nghĩa
 ````
 ## B. Một số toán tử trong Macro
-### 1. Toán tử #
+### 1. Toán tử "#"
 Toán tử # dùng để biến 1 giá trị thành 1 chuỗi ký tự. Nhưng hết sức lưu ý khi dùng toán tử #, vì khi dùng # cho 1 macro thì macro đó sẽ không được mở rộng trước khi đưa vào toán tử #. <br>
 Lấy ví dụ:
 ```c
@@ -209,7 +209,7 @@ output
 ```
 "10"
 ````
-### 2. Toán tử ##
+### 2. Toán tử "##"
 Toán tử ## dùng để nối chuỗi
 ```c
 #include <stdio.h>
