@@ -16,15 +16,17 @@ Quá trình này bao gồm các công việc:<br>
 
     
 ```c
-Ex.h
+Ex.h (Ví dụ cho file.h)
 #ifdef EX_H
 #define EX_H
 printf("Đây là file.h");
 #endif
-file.c
+
+file.c (Ví dụ cho file.c)
 #include "Ex.h"
 printf("Đây là dòng code dưới dòng code trong file.h");
-file.i
+
+file.i (Quá trình preprocessing sẽ biên dịch từ file.c sang file.i như sau)
 #ifdef EX_H
 #define EX_H
 printf("Đây là file.h");
