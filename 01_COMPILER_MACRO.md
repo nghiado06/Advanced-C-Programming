@@ -5,16 +5,17 @@ Macro là gì? Ý nghĩa của Macro ứng với quá trình compile và code.
 ### A. Định nghĩa
 Compiler có thể hiểu đơn giản là trình biên dịch, là một chương trình dịch (compile) một mã nguồn từ ngôn ngữ lập trình cấp cao (C++, C, Java,..) sang ngôn ngữ máy (Machine Language) để CPU, máy tính có thể hiểu được. 
 ### B. Quá trình compile (Compiler Process)
-- Quá trình compile sẽ bao gồm các bước sau:
-    - ****Preprocessing**** (Tiền xử lý): Quá trình sẽ chuyển các file (.c;.cpp;.h) sang file .i <br>
+Quá trình compile sẽ bao gồm các bước sau:
+- ****Preprocessing**** (Tiền xử lý):
+    - Quá trình sẽ chuyển các file (.c;.cpp;.h) sang file .i <br>
     ```
     Cú pháp để thực hiện quá trình trong terminal (IDE VScode) như sau:
     gcc -E file.c -o file.i
     ````
-    Quá trình này bao gồm các công việc:<br>
-* **Include Header**: Tìm kiếm và chèn mã nguồn
+    - Quá trình này bao gồm các công việc:<br>
+        -  **Include Header**: Tìm kiếm và chèn mã nguồn
 
-        ```
+        ```cpp
         Ex.h (Ví dụ cho file.h)
         #ifndef EX_H
         #define EX_H
@@ -33,9 +34,9 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         printf("Đây là dòng code dưới dòng code trong file.h");
         ```
 
-* **Delete Comment**: Xóa đi các dòng comment
+        - **Delete Comment**: Xóa đi các dòng comment
 
-        ```
+        ```cpp
         file.c
         // Dòng này sẽ bị xóa
         printf("Dòng code này thì không bị xóa");
@@ -43,9 +44,9 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
         ```
-* **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
+        - **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
 
-        ```
+        ```cpp
         file.c
         #define LED 17
         #define BUZZER 16
