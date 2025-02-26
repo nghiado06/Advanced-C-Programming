@@ -91,6 +91,29 @@
       - Quy tắc ép kiểu:
         - Không thể ép kiểu char* cho các kiểu int, short, ... Chỉ có thể ép kiểu cho chuỗi hoặc dạng địa chỉ và ngược lại.
         - Không thể dùng va_arg(args, short/char) cho các đối số có kiểu dữ liệu tương tự nữa vì chúng đã bị mở rộng thành int.
+  - **va_copy(args2, args):**
+    - hàm dùng để copy danh sách đối số biến đổi từ args sang args2.
+    - Lưu ý khi dùng hàm này là phải kích hoạt danh sách của args trước.
+    ```cpp
+    void test(int count,...){
+      va_list args;
+      va_list args2;
+      va_start(args, count);
+      va_copy(args2, args);
+      for (int i = 0; i< count; i++){
+        printf("%d ", va_arg(args, int));
+        printf("%d\n", va_arg(args2, int));
+      }
+    }
+    int main(){
+      test(2, 3, 4);
+    }
+    ```
+    ouput
+    ```
+    3 3
+    4 4
+    ```
   - **va_end(args):** kết thúc việc sử dụng danh sách đối số biến đổi. Nó cần được gọi khi kết thúc hàm.
   - Trong các ví dụ ở trên đều có một hàm va_end(args) ở cuối.
 - Như vậy cấu trúc để sử dụng **danh sách đối số biến đổi** là:
