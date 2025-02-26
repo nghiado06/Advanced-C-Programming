@@ -59,17 +59,17 @@ Quá trình compile sẽ bao gồm các bước sau:
         digitalWrite(16, LOW);
         ```
 
-    - ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
+- ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
     ```
     Cú pháp để thực hiện quá trình trong terminal (IDE VScode) như sau:
     gcc -S file.i -o file.s
     ````
-    - ****Assemble****: Chuyển file.s sang file.o;.obj, chuyển sang ngôn ngữ máy (Mã nhị phân)
+- ****Assemble****: Chuyển file.s sang file.o;.obj, chuyển sang ngôn ngữ máy (Mã nhị phân)
     ```
     Cú pháp để thực hiện quá trình trong terminal (IDE VSCode) như sau:
     gcc -c file.s -0 file.o
     ````
-    - ****Linking****: Gom tất cả các file.o lại với nhau để chuyển thành file thực thi .exe
+- ****Linking****: Gom tất cả các file.o lại với nhau để chuyển thành file thực thi .exe
     ```
     Cú pháp để thực hiện quá trình trong terminal (IDE VSCode) như sau:
     gcc file1.o file2.o 0o name.exe (name tùy ý)
