@@ -43,11 +43,31 @@
     - **para2:** kiểu dữ liệu
     - Khi sử dụng macro này nên lưu ý những điều sau:
       - Mỗi lần gọi hàm là 1 lần hàm này truy cập đối số, dù cho lần gọi hàm đó có ý nghĩa gì.
+      ```cpp
+      void test(int count, ...){
+      va_list args;
+      va_start(args, count);
+      va_arg(args, int); //Đã truy cập đối số đầu tiên
+
+      printf("Đây là đối số thứ hai: %d\n", va_arg(args, int));
+      printf("Đây là đối số thứ ba: %s\n", va_arg(args, char*));
+      }
+
+      int main(){
+      test(3, 1,2,"Hello World");
+      }
+      ```
+      output
+      ```
+      Đây là đối số thứ hai: 2
+      Đây là đối số thứ ba: Hello World
+      ```
       - **Quy tắc mở rộng kiểu dữ liệu mặc định (Default Arguments Promotion):**
         - char --> int
         - short --> int
         - float --> double
       - Quy tắc ép kiểu:
         - Không thể ép kiểu char* cho các kiểu int, short, ... Chỉ có thể ép kiểu cho chuỗi hoặc dạng địa chỉ và ngược lại.
+        - Không thể dùng va_arg(args, short/char) cho các đối số có kiểu dữ liệu tương tự nữa vì chúng đã bị mở rộng thành int.
     
 # 2. Thư viện ASSERT
