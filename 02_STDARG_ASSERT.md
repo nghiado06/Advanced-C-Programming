@@ -34,8 +34,8 @@
     
     ```cpp
     void (int a, int b, int count,...){
-    va_list args;
-    va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời đối số này cũng giúp xác số lượng phần tử tham số tự do.
+      va_list args;
+      va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời đối số này cũng giúp xác số lượng phần tử tham số tự do.
     }
     ```
   - **va_arg(para1, para2)**: Truy cập đối số trong danh sách.
@@ -45,12 +45,13 @@
       - Mỗi lần gọi hàm là 1 lần hàm này truy cập đối số, dù cho lần gọi hàm đó có ý nghĩa gì.
       ```cpp
       void test(int count, ...){
-      va_list args;
-      va_start(args, count);
-      va_arg(args, int); //Đã truy cập đối số đầu tiên
-
-      printf("Đây là đối số thứ hai: %d\n", va_arg(args, int));
-      printf("Đây là đối số thứ ba: %s\n", va_arg(args, char*));
+        va_list args;
+        va_start(args, count);
+        va_arg(args, int); //Đã truy cập đối số đầu tiên
+  
+        printf("Đây là đối số thứ hai: %d\n", va_arg(args, int));
+        printf("Đây là đối số thứ ba: %s\n", va_arg(args, char*));
+        va_end(args);
       }
 
       int main(){
@@ -73,6 +74,7 @@
         for (int i = 0; i<count; i++){
           int value = va_arg(args, int);
           printf("%d\n", value);
+        va_end(args);
         }
       }
       int main(){
@@ -86,5 +88,7 @@
       - Quy tắc ép kiểu:
         - Không thể ép kiểu char* cho các kiểu int, short, ... Chỉ có thể ép kiểu cho chuỗi hoặc dạng địa chỉ và ngược lại.
         - Không thể dùng va_arg(args, short/char) cho các đối số có kiểu dữ liệu tương tự nữa vì chúng đã bị mở rộng thành int.
+  - **va_end(args):** kết thúc việc sử dụng danh sách đối số biến đổi. Nó cần được gọi khi kết thúc hàm.
+  - Trong các ví dụ ở trên đều có một hàm va_end(args) ở cuối.
     
 # 2. Thư viện ASSERT
