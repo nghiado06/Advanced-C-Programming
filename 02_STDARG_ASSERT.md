@@ -13,7 +13,7 @@
   ```
     
     - Bản chất của va_list chính là kiểu dữ liệu chuỗi.
-      
+    
   ```cpp
    void test(int count,...){ 
    // typedef char* va_list
@@ -22,7 +22,7 @@
    char *args = "int count,..."; 
    } 
   ```
-
+  
   - **va_start(para1, para2)**:
     - Bắt đầu một danh sách đối số biến đổi.
     - **para1** là đối số mang kiểu dữ liệu va_list.
