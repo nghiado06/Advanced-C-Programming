@@ -66,6 +66,23 @@
         - char --> int
         - short --> int
         - float --> double
+      ```cpp
+      void test(int count,...){
+        va_list args;
+        va_start(args, count);
+        for (int i = 0; i<count; i++){
+          int value = va_arg(args, int);
+          printf("%d\n", value);
+        }
+      }
+      int main(){
+        test(3, 1, 'A', (short)5);
+      }
+      ```
+      output
+      ```
+      1 65 5(kiểu int)
+      ```
       - Quy tắc ép kiểu:
         - Không thể ép kiểu char* cho các kiểu int, short, ... Chỉ có thể ép kiểu cho chuỗi hoặc dạng địa chỉ và ngược lại.
         - Không thể dùng va_arg(args, short/char) cho các đối số có kiểu dữ liệu tương tự nữa vì chúng đã bị mở rộng thành int.
