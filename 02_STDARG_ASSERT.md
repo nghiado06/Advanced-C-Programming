@@ -8,12 +8,10 @@
 - Các hàm thông dụng của thư viện stdarg:
   - **va_list:**
     - Là một kiểu dữ liệu để đại diện cho danh sách các đối số biến đổi (Khai báo biến).
+    - Bản chất của va_list là một kiểu dữ liệu chuỗi.
   ```cpp
   va_list args;
-  ```
-      
-      - Bản chất của va_list chính là kiểu dữ liệu chuỗi.
-       
+  ```  
   ```cpp
    void test(int count,...){ 
    // typedef char* va_list
