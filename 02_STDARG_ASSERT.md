@@ -11,7 +11,9 @@
   ```cpp
   va_list args;
   ```
+  
     - Bản chất của va_list chính là kiểu dữ liệu chuỗi.
+      
   ```cpp
    void test(int count,...){ 
    // typedef char* va_list
