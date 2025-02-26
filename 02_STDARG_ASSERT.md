@@ -35,9 +35,7 @@
     ```cpp
     void (int a, int b, int count,...){
     va_list args;
-    va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời
-<br>
-    đối số này cũng giúp xác số lượng phần tử tham số tự do.
+    va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời đối số này cũng giúp xác số lượng phần tử tham số tự do.
     }
     ```
     
