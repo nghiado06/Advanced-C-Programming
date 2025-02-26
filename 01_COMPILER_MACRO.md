@@ -82,7 +82,7 @@ Chia làm 3 nhóm chính:<br>
 - #include
 - #define, #undef
 - #if, #elif, #else, #ifdef, #ifndef
-### #include
+### Macro #include
 Chỉ thị #include dùng để chèn nội dụng của 1 file nào đó vào mã nguồn của chương trình
 - Tái sử dụng mã nguồn
 - Phân chia chương trình thành các phần nhỏ, giúp quản lý mã nguồn hiệu quả
@@ -94,7 +94,7 @@ int main()
     code block;
 }
 ````
-### #define
+### Macro #define
 - Dùng để thay thế một chuỗi bằng 1 chuỗi khác trước khi chương trình biên dịch
 ```c
 #define PI 3.14
@@ -122,7 +122,7 @@ ouput
 20
 ````
 
-### #undef
+### Macro #undef
 Chỉ thị #undef dùng để hủy định nghĩa của một macro đã được định nghĩa bằng #define trước đó.
 ```c
 #include <stdio.h>
@@ -141,7 +141,7 @@ ouput
 21
 50
 ````
-### #if #elif #else
+### Macros #if #elif #else
 Các chỉ thị này cũng tương tự với if, else, elif trong C nhưng khác ở chỗ nó dành để kiểm tra macro.
 ```c
 #include <stdio.h>
@@ -159,7 +159,7 @@ int main(){
     return 0;
 }
 ````
-### #ifdef #ifndef
+### Macros #ifdef #ifndef
 - Chỉ thị #ifdef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro đã được định nghĩa thì mã nguồn sau #ifdef sẽ được biên dịch.
 - Chỉ thị #ifndef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro chưa được định nghĩa thì mã nguồn sau #ifndef sẽ được biên dịch
 ```c
