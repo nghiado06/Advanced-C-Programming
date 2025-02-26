@@ -14,7 +14,7 @@
    va_list args;
    Tương đương với:
    char *args = "int count,..."; 
- } 
+   } 
   ```
   - va_start(args, )
 # ASSERT
