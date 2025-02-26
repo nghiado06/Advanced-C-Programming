@@ -14,7 +14,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
     Quá trình này bao gồm các công việc:<br>
 * **Include Header**: Tìm kiếm và chèn mã nguồn
 
-        ```c
+        ```
         Ex.h (Ví dụ cho file.h)
         #ifndef EX_H
         #define EX_H
@@ -31,21 +31,21 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         printf("Đây là file.h");
         #endif
         printf("Đây là dòng code dưới dòng code trong file.h");
-        ````
+        ```
 
 * **Delete Comment**: Xóa đi các dòng comment
 
-        ```c
+        ```
         file.c
         // Dòng này sẽ bị xóa
         printf("Dòng code này thì không bị xóa");
   
         file.i (Khi này file.i sẽ không còn dòng commnent nữa)
         printf("Dòng code này thì không bị xóa");
-        ````
+        ```
 * **Expand Macro**: Thay thế các macro, chỉ có tác dụng thay thế như thay thế văn bản
 
-        ```c
+        ```
         file.c
         #define LED 17
         #define BUZZER 16
@@ -56,7 +56,7 @@ Compiler có thể hiểu đơn giản là trình biên dịch, là một chươ
         file.i
         digitalWrite(17, HIGH);
         digitalWrite(16, LOW);
-        ````
+        ```
 
     - ****Compiler**** (Biên dịch): Chuyển từ file.i sang file.s, chuyển sang ngôn ngữ assembly
     ```
