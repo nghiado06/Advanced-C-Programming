@@ -1,4 +1,7 @@
-# STDARG
+## Tìm hiểu về Thư viện STDARG và ASSERT
+- Thư viện stdarg là gì? Có ý nghĩa gì?
+- Thư viện assert là gì? Có ý nghĩa gì?
+# 1. Thư viện STDARG
 ****Thư viện stdarg:****
 - Cung cấp các phương thức để làm việc với hàm số có số lượng input parameter không cố định
 - Các hàm như printf và scanf là ví dụ điển hiển
@@ -31,4 +34,4 @@
     va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời       đối số này cũng giúp xác số lượng phần tử tham số tự do.
     }
     ```
-# ASSERT
+# 2. Thư viện ASSERT
