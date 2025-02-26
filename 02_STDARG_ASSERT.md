@@ -114,8 +114,9 @@
     3 3
     4 4
     ```
-  - **va_end(args):** kết thúc việc sử dụng danh sách đối số biến đổi. Nó cần được gọi khi kết thúc hàm.
-  - Trong các ví dụ ở trên đều có một hàm va_end(args) ở cuối.
+  - **va_end(args):**
+    - Kết thúc việc sử dụng danh sách đối số biến đổi. Nó cần được gọi khi kết thúc hàm.
+    - Trong các ví dụ ở trên đều có một hàm va_end(args) ở cuối.
 - Như vậy cấu trúc để sử dụng **danh sách đối số biến đổi** là:
 ```cpp
 void function(dataType const_para,...){
@@ -127,3 +128,39 @@ void function(dataType const_para,...){
 ```
     
 # 2. Thư viện ASSERT
+- Cung cấp macro assert.
+- Macro này được dùng để kiểm tra một điều kiện.
+- Nếu điều kiện đúng (true), không có gì xảy ra và chương trình tiếp tục thực thi.
+- Nếu điều kiện sai (false), chương trình dừng lại và thông báo một thông điệp lỗi.
+- Dùng trong debug, dùng #define NDEBUG để tắt debug.
+```cpp
+#include <stdio.h>
+#include <assert.h>
+
+int main(){
+  int x = 5;
+  assert(x == 5);
+  //Chương trình sẽ tiếp thực thi vì điều kiện đúng.
+  printf("x = %d", x);
+}
+```
+output
+```
+x = 5
+```
+
+```cpp
+#include <stdio.h>
+#include <assert.h>
+
+int main(){
+  int x = 4;
+  assert(x == 5);
+  //Chương trình sẽ tiếp thực thi vì điều kiện đúng.
+  printf("x = %d", x);
+}
+```
+output
+```
+Báo lỗi ngay trong lúc debug
+```
