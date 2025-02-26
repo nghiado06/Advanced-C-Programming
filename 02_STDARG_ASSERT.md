@@ -38,5 +38,16 @@
     va_start(args, count); //count là đối số cuối cùng có kiểu dữ liệu cố định int. Đồng thời đối số này cũng giúp xác số lượng phần tử tham số tự do.
     }
     ```
+  - **va_arg(para1, para2)**: Truy cập đối số trong danh sách.
+    - **para1:** đối số có kiểu dữ liệu va_list.
+    - **para2:** kiểu dữ liệu
+    - Khi sử dụng macro này nên lưu ý những điều sau:
+      - Mỗi lần gọi hàm là 1 lần hàm này truy cập đối số, dù cho lần gọi hàm đó có ý nghĩa gì.
+      - **Quy tắc mở rộng kiểu dữ liệu mặc định (Default Arguments Promotion):**
+        - char --> int
+        - short --> int
+        - float --> double
+      - Quy tắc ép kiểu:
+        - Không thể ép kiểu char* cho các kiểu int, short, ... Chỉ có thể ép kiểu cho chuỗi hoặc dạng địa chỉ và ngược lại.
     
 # 2. Thư viện ASSERT
