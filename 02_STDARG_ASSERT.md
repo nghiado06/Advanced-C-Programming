@@ -1,4 +1,4 @@
-## Tìm hiểu về Thư viện STDARG và ASSERT
+# Tìm hiểu về Thư viện STDARG và ASSERT
 - Thư viện stdarg là gì? Có ý nghĩa gì?
 - Thư viện assert là gì? Có ý nghĩa gì?
 # 1. Thư viện STDARG
