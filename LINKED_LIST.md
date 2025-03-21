@@ -33,11 +33,72 @@ typedef struct node
 
 ## 2.2 Hàm createNode
 
+'''
+node* createNode(int value)
+{
+    node* ptr = (node*)malloc(sizeof(node));
+    ptr->value = value;
+    ptr->next = NULL;
+    return ptr;
+}
+
+'''
+
 ## 2.3 Hàm push_back
+
+'''
+void push_back(node** array, int value)
+{
+    node* temp;
+    temp = createNode(value); // khoi tao node
+                              // temp = 0xa1
+
+    
+    if (*array == NULL)   // if array doesn't have any node yet
+    {
+
+        *array = temp;
+    }
+    else 
+    {
+        node* p = *array; 
+        while (p->next != NULL) 
+        {
+            p = p->next;    // check next node until it a last node
+
+        }
+
+        p->next = temp;
+    }
+}
+
+'''
 
 ## 2.4 Hàm push_front
 
+
+
 ## 2.5 Hàm pop_back
+
+'''
+void pop_back(node** array)
+{
+    node* p, * temp;
+    p = *array;
+    int i = 0; // to 
+
+    while (p->next->next != NULL)     // free the last node in the list
+    {
+        p = p->next;
+        i++;
+    }
+    temp = p->next;
+    p->next = NULL;
+    free(temp);
+
+}
+
+'''
 
 ## 2.6 Hàm pop_front
 
