@@ -1,5 +1,5 @@
 # TÌM HIỂU VỀ LINKED LIST
-- Tìm hiểu về Khái niệm Linked Liít
+- Tìm hiểu về Khái niệm Linked List
 - Tìm hiểu về các hàm thao tác với Linked List:
 	- Cấu trúc của Node
 	- Hàm createNode
@@ -23,6 +23,14 @@ giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo tro
 # 2. HÀM THAO TÁC
 ## 2.1 Cấu trúc Node
 
+'''
+typedef struct node
+{
+	int value;
+	struct node* next;
+}node;
+'''
+
 ## 2.2 Hàm createNode
 
 ## 2.3 Hàm push_back
@@ -35,7 +43,7 @@ giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo tro
 
 ## 2.7 Hàm front/back
 
-## 2.8 Hàm iínert
+## 2.8 Hàm insert
 
 ## 2.9 Hàm erase
 
