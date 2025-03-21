@@ -10,6 +10,10 @@
 	- Hàm front/back
 	- Hàm insert
 	- Hàm erase
+	- Hàm size
+	- Hàm get
+	- Hàm empty
+	- Hàm clear
 
 # 1. Khái niệm
 - Linked list là một cấu trúc dữ liệu trong lập trình máy tính, được sử dụng để tổ chức
