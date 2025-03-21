@@ -18,4 +18,31 @@
 # 1. KHÁI NIỆM
 - Linked list là một cấu trúc dữ liệu trong lập trình máy tính, được sử dụng để tổ chức
 và lưu trữ dữ liệu. Một linked list bao gồm một chuỗi các "nút" (nodes), mỗi nút chứa một
-giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo trong chuỗi
+giá trị dữ liệu và một con trỏ (pointer) đến nút tiếp theo trong chuỗi.
+
+# 2. HÀM THAO TÁC
+## 2.1 Cấu trúc Node
+
+## 2.2 Hàm createNode
+
+## 2.3 Hàm push_back
+
+## 2.4 Hàm push_front
+
+## 2.5 Hàm pop_back
+
+## 2.6 Hàm pop_front
+
+## 2.7 Hàm front/back
+
+## 2.8 Hàm iínert
+
+## 2.9 Hàm erase
+
+## 2.10 Hàm size
+
+## 2.11 Hàm get
+
+## 2.12 Hàm empty
+
+## 2.13 Hàm clear
