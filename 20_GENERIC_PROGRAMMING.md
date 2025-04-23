@@ -76,11 +76,43 @@ T1 sum(T1 a, T2 b)
 int a = 10;
 double b = 15.5;
 
-int result = sum(a,b);
+cout << sum(a,b);
 ```
 output
 
 ```cpp
-result = 15 //Vì đây là kiểu dữ liệu int
+15 //Vì kiểu dữ liệu trả về là int
 ```
 
+- Tiếp đến là 1 tính chất khác của Function Template, quay lại một chút với phương thức trong class, nếu như chúng ta có các kiểu khai báo phương thức: tham số mặc định, tham số không mặc định. Thì bên function template này cũng sẽ tương tự.
+- Khi đó giá trị mặc định của typename sẽ là 1 kiểu dữ liệu, khi truyền vào tham số với kiểu dữ liệu bất kỳ, trình biên dịch vẫn sẽ tự động hiểu và sử dụng kiểu dữ liệu đó.
+- Và nếu muốn ép kiểu trả về, ta sẽ ép kiểu hằng sau hàm với cú pháp function<dataType>()
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+// tham số mặc định
+template <typename T = int, typename T1 = int> //Gán mặc định là int
+T square(T1 x)
+{
+    return x * x;
+}
+
+int main()
+{
+    cout << square(4) << endl; // Kiểu dữ liệu truyền vào là int và trả cũng kiểu dữ liệu int
+    cout << square(4.5) << endl; // Kiểu dữ liệu truyền vào là double --> Tính toán ra 20.25 --> nhưng kiểu dữ liệu trả về lại là int nên kết quả sẽ là 20
+    cout << square<double>(4.5) << endl; // Ta ép kiểu dữ liệu trả về là double thì kết quả sẽ là 20.25
+    return 0;      
+}
+```
+
+output
+
+```cpp
+16
+20
+20.25
+```
