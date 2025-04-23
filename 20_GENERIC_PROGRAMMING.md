@@ -43,3 +43,44 @@ T1 func(T1 a, T2 b, T3 c){}
 
 ```
 
+- Trong đó, typename T này có thể hiểu là một kiểu dữ liệu tổng Quát, khi truyền tham số với kiểu dữ liệu bất kỳ, trình biên dịch sẽ tự động hiểu chỗ đó là cần kiểu dữ liệu nào. Và chúng ta có thể khai báo nhiều typename cùng 1 lúc.
+- Lấy ví dụ cho khai báo 1 typename:
+
+```cpp
+template <typename T>
+T sum(T a, T b)
+{
+    return a + b;
+}
+
+int result1 = sum(5, 10);           // Tự động biết T là int
+double result2 =sum(3.14, 2.71);
+```
+
+output
+
+```cpp
+result1 = 15
+result2 = 5.85
+```
+
+- Lấy ví dụ cho khai báo nhiều typename, cũng tương tự với 1, nó chỉ quan tâm đến kiểu dữ liệu tham số truyền vào:
+
+```cpp
+template <typename T1, typename T2>
+T1 sum(T1 a, T2 b)
+{
+    return a + b;
+}
+
+int a = 10;
+double b = 15.5;
+
+int result = sum(a,b);
+```
+output
+
+```cpp
+result = 15 //Vì đây là kiểu dữ liệu int
+```
+
