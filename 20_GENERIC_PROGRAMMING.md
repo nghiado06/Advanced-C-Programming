@@ -116,3 +116,48 @@ output
 20
 20.25
 ```
+
+## 2.2 Class Template
+- Class templates trong C++ là một khái niệm tương tự như function templates, nhưng được áp dụng cho class thay vì function. Class templates cho phép tạo các class có thể làm việc với nhiều kiểu dữ liệu mà không cần viết lại code.
+- Template chỉ áp dụng cho một định nghĩa cụ thể của class, không áp dụng cho tất cả các class.
+- Cú pháp:
+
+```cpp
+template <typename T>
+class <name_of_class>
+{
+    private:
+        T var;
+}
+```
+
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Sensor{
+    private:
+        T value;
+    public:
+        Sensor(T init): value(init){}
+        void readSensor(T newValue){ value = newValue; }
+        T getValue() const { return value; }
+        void display(){ cout << "Gia tri cam bien: " << value << endl; }
+};
+
+int main(int argc, char const *argv[]){
+    Sensor tempSensor(36.5);
+    tempSensor.display();
+
+    Sensor lightSensor(512);
+    lightSensor.display();
+
+    Sensor stateSensor("OFF");
+    stateSensor.display();
+    return 0;
+}
+
+```
