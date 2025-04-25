@@ -154,7 +154,8 @@ output
 Hay nói cách khác, thứ bị ép kiểu là T vì nó đang không được **chỉ định hay tự suy**, hàm sẽ hoạt động như kiểu là (double)(int*int).
     - Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng **không được phép tác động lên nhau**.
     - Và nếu như hàm không có gì để chỉ định hay suy luận, thì nó sẽ xét đến **số lượng biến typename**.
-    - Lấy ví dụ rõ hơn:
+
+- Lấy ví dụ rõ hơn:
 
 ```cpp
 #include <iostream>
