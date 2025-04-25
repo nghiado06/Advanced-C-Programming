@@ -151,8 +151,8 @@ output
     - Tuy nhiên, hiểu rõ hơn một chút, đối với ví dụ trên, thực chất đã xảy ra 2 cơ chế.
     - Có khi nào bạn đặt câu hỏi nếu như ta chỉ định <double> như vậy thì liệu khi tính toán, T1 là kiểu dữ liệu gì? Liệu nó có phải là double*double.
     - Câu trả lời là **không**, khi chúng ta truyền tham số vào T1 a, thì khi này đã xảy ra cơ chế **Deduction**, trình biên dịch đã tự suy T1 là int thì nó sẽ mãi là int, không thể bị ép kiểu nữa.
-Hay nói cách khác, thứ bị ép kiểu là T vì nó đang không được chỉ định hay tự suy, hàm sẽ hoạt động như kiểu là (double)(int*int).
-    - Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng không được phép tác động lên nhau.
+Hay nói cách khác, thứ bị ép kiểu là T vì nó đang không được **chỉ định hay tự suy**, hàm sẽ hoạt động như kiểu là (double)(int*int).
+    - Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng **không được phép tác động lên nhau**.
     - Và nếu như hàm không có gì để chỉ định hay suy luận, thì nó sẽ xét đến **số lượng biến typename**.
     - Lấy ví dụ rõ hơn:
 
@@ -348,10 +348,123 @@ int main(){
 - Câu trả lời đó chính là không có sự khác biệt NHƯNG chỉ đối với các trường hợp đơn giản trên thôi. Khi ta sử dụng với các toán tử phức tạp hơn, điển hình như varadic.
 - Varadic như đã tìm hiểu ở các nội dung trước, nó cho phép ta điền số lượng tham số không cụ thể. Đối với class cũng vậy, nó cũng có một khái niệm tên varadic template.
 
-## Varadic Template
+## 2.4 Varadic Template
 - Variadic Template cho phép bạn tạo các hàm template hoặc lớp template có thể nhận một số lượng tham số không xác định. Điều này giúp bạn viết mã linh hoạt hơn khi làm việc với danh sách tham số có kích thước động.
 - Lấy ví dụ:
 
 ```cpp
+#include <iostream>
+using namespace std;
 
+// Function Template khi chỉ có một tham số
+template<typename T>
+T sum(T value)
+{
+    return value;
+}
+
+// Function Template sử dụng Variadic Template, ít nhất 2 tham số
+template<typename T, typename... Args>  
+auto sum(T first, Args... args)
+{        
+    return first + sum(args...);        
+}
+
+
+int main()
+{
+    cout << sum(1, 2, 3.6, 5.7, 40) << endl;
+    return 0;
+}
+```
+
+- Quay trở lại với vấn đề ban đầu, việc sử dụng chuyên biệt hóa kết hợp với Varadic Template sẽ diễn ra như thế nào. Hãy cùng phân tích 1 ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+template <typename T>
+void display()
+{
+    cout << "Đây là kiểu chưa được chuyên biệt" << endl;
+};
+
+template <>
+void display<int>()
+{
+    cout << "Đây là kiểu int" << endl;
+}
+
+template <>
+void display<bool>()
+{
+    cout << "Đây là kiểu bool" << endl;
+}
+
+template <>
+void display<double>()
+{
+    cout << "Đây là kiểu double" << endl;
+}
+
+template <>
+void display<float>()
+{
+    cout << "Đây là kiểu float" << endl;
+}
+
+// Trường hợp 1 kiểu
+template <typename T>
+void display_all()
+{
+    display<T>();
+}
+
+// Trường hợp từ 2 kiểu trở lên
+template <typename First, typename Second, typename... Rest>
+void display_all()
+{
+    display<First>();
+    display_all<Second, Rest...>();
+}
+
+int main()
+{
+    display_all<bool, double, int>();
+
+    return 0;
+}
+```
+
+- Ở đây chúng ta đã vận dụng các cơ chế ở trên để viết chương trình này.
+- Bây giờ hãy cùng phân tích từng bước:
+
+```cpp
+B1: display_all<bool, double, int>
+Phân tích: ở đây xét thấy có 3 biến typename --> trình biên dịch hiểu đây là hàm display_all với trường hợp 2 kiểu trở lên.
+B2: display<First> --> display<bool> --> Đây là kiểu bool
+B3: display<double, int>
+Phân tích: tương tự như ở trên, trình biên dịch vẫn hiểu đây là hàm display_all với trường hợp 2 kiểu trở lên.
+B4: display<First> --> display<double> --> Đây là kiểu double
+B5: display<int> --> Khi này trình biên dịch sẽ chuyển sang hiểu rằng đây là display_all với trường hợp 1 kiểu.
+B6: display<int> --> display<int> --> Đây là kiểu int
+```
+
+- Vậy câu hỏi đặt ra ở đây là, tại sao ta phải dùng đến typename Second, sao không để là <typename First, typename... Rest> thôi, như ở ví dụ cho Varadic Template trên.
+- Câu trả lời đó là, chương trình sẽ báo lỗi overload cho hai hàm y hệt nhau. Vì đặc điểm của template parameters là **Rest vẫn nhận giá trị {}**. Tức là khi không còn tham số đằng sau nữa thì Rest vẫn sẽ hiểu là đằng sau còn rỗng. Còn đối với hàm bình thường thì varadics sẽ không hiểu giá trị rỗng, và nếu có rỗng thì varadic sẽ không tồn tại.
+- Cùng lấy ví dụ để trực quan hơn:
+
+```cpp
+Nếu như tôi viết:
+template <typename First, typename... Rest>
+void display_all()
+{
+    display<First>();
+    display_all<Rest...>();
+}
+thì khi đến display_all<float> thì khi này trình biên dịch vẫn hiểu đây là display_all<float, (rỗng)> và khi này hàm display_all này vẫn hoạt động, và nó sẽ bị trùng với hàm trường hợp 1 kiểu đã được định nghĩa ở trên.
+Dẫn đến báo lỗi.
+
+Còn với hàm bình thường như hàm sum thì ví dụ như sum(3) thì trình biên sẽ hiểu là chẳng còn giá trị nào đằng sau nữa và gọi hàm sum(T value) với 1 tham số.
 ```
