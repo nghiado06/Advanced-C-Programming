@@ -126,15 +126,15 @@ output
 - Các cơ chế:
   - **Deduction**: Compiler tự suy
 
-```cpp
-template<typename T>
-void print(T value) {
-    cout << "T is: " << typeid(T).name() << endl;
-}
-
-print(42);        // T = int  ← compiler **deduces** T
-print(3.14);      // T = double
-```
+    ```cpp
+    template<typename T>
+    void print(T value) {
+        cout << "T is: " << typeid(T).name() << endl;
+    }
+    
+    print(42);        // T = int  ← compiler **deduces** T
+    print(3.14);      // T = double
+    ```
 
   - **Explicit Instantiation:** Bạn chỉ rõ hay có thể hiểu là bạn đang ép kiểu cho nó.
 
@@ -148,15 +148,15 @@ T return_a(T1 a)
 return_a<double>(4); //Trả về 16.0
 ```
 
-- Tuy nhiên, hiểu rõ hơn một chút, đối với ví dụ trên, thực chất đã xảy ra 2 cơ chế.
-- Có khi nào bạn đặt câu hỏi nếu như ta chỉ định <double> như vậy thì liệu khi tính toán, T1 là kiểu dữ liệu gì? Liệu nó có phải là double*double.
-- Câu trả lời là **không**, khi chúng ta truyền tham số vào T1 a, thì khi này đã xảy ra cơ chế **Deduction**, trình biên dịch đã tự suy T1 là int thì nó sẽ mãi là int, không thể bị ép kiểu nữa.
+    - Tuy nhiên, hiểu rõ hơn một chút, đối với ví dụ trên, thực chất đã xảy ra 2 cơ chế.
+    - Có khi nào bạn đặt câu hỏi nếu như ta chỉ định <double> như vậy thì liệu khi tính toán, T1 là kiểu dữ liệu gì? Liệu nó có phải là double*double.
+    - Câu trả lời là **không**, khi chúng ta truyền tham số vào T1 a, thì khi này đã xảy ra cơ chế **Deduction**, trình biên dịch đã tự suy T1 là int thì nó sẽ mãi là int, không thể bị ép kiểu nữa.
 Hay nói cách khác, thứ bị ép kiểu là T vì nó đang không được chỉ định hay tự suy, hàm sẽ hoạt động như kiểu là (double)(int*int).
-- Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng không được phép tác động lên nhau.
-- Và nếu như hàm không có gì để chỉ định hay suy luận, thì nó sẽ xét đến **số lượng biến typename**.
-- Lấy ví dụ rõ hơn:
+    - Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng không được phép tác động lên nhau.
+    - Và nếu như hàm không có gì để chỉ định hay suy luận, thì nó sẽ xét đến **số lượng biến typename**.
+    - Lấy ví dụ rõ hơn:
 
-```
+```cpp
 #include <iostream>
 using namespace std;
 
