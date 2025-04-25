@@ -138,15 +138,15 @@ output
 
   - **Explicit Instantiation:** Bạn chỉ rõ hay có thể hiểu là bạn đang ép kiểu cho nó.
 
-```cpp
-template <typename T = int, typename T1 = int>
-T return_a(T1 a)
-{
-  return a*a;
-}
-
-return_a<double>(4); //Trả về 16.0
-```
+      ```cpp
+      template <typename T = int, typename T1 = int>
+      T return_a(T1 a)
+      {
+        return a*a;
+      }
+      
+      return_a<double>(4); //Trả về 16.0
+      ```
 
     - Tuy nhiên, hiểu rõ hơn một chút, đối với ví dụ trên, thực chất đã xảy ra 2 cơ chế.
     - Có khi nào bạn đặt câu hỏi nếu như ta chỉ định <double> như vậy thì liệu khi tính toán, T1 là kiểu dữ liệu gì? Liệu nó có phải là double*double.
