@@ -464,8 +464,10 @@ void display_all()
     display<First>();
     display_all<Rest...>();
 }
-thì khi đến display_all<float> thì khi này trình biên dịch vẫn hiểu đây là display_all<float, (rỗng)> và khi này hàm display_all này vẫn hoạt động, và nó sẽ bị trùng với hàm trường hợp 1 kiểu đã được định nghĩa ở trên.
+thì khi đến display_all<float> thì khi này trình biên dịch vẫn hiểu đây là display_all<float, (rỗng)> và khi này
+hàm display_all này vẫn hoạt động, và nó sẽ bị trùng với hàm trường hợp 1 kiểu đã được định nghĩa ở trên.
 Dẫn đến báo lỗi.
 
-Còn với hàm bình thường như hàm sum thì ví dụ như sum(3) thì trình biên sẽ hiểu là chẳng còn giá trị nào đằng sau nữa và gọi hàm sum(T value) với 1 tham số.
+Còn với hàm bình thường như hàm sum thì ví dụ như sum(3) thì trình biên sẽ hiểu là chẳng còn giá trị nào đằng
+sau nữa và gọi hàm sum(T value) với 1 tham số.
 ```
