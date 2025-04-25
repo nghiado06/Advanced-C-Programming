@@ -2,6 +2,7 @@
 - Hôm nay hãy cùng tìm hiểu về Generic và từ khóa Template.
 - Các khái niệm:
   - Function Template
+  - Các cơ chế của template
   - Class Template
   - Varadic Template
 
@@ -84,7 +85,7 @@ output
 15 //Vì kiểu dữ liệu trả về là int
 ```
 
-- Tiếp đến là 1 tính chất khác của Function Template, quay lại một chút với phương thức trong class, nếu như chúng ta có các kiểu khai báo phương thức: tham số mặc định, tham số không mặc định. Thì bên function template này cũng sẽ tương tự.
+- Tiếp đến là 1 tính chất khác của Function Template, quay lại một chút với phương thức trong class, nếu như chúng ta có các kiểu khai báo phương thức: tham số mặc định, tham số không mặc định. Thì bên function template này cũng sẽ tương tự. Và không được phép để typename cuối không có mặc định nếu như bạn đã để mặc định trước đó.
 - Khi đó giá trị mặc định của typename sẽ là 1 kiểu dữ liệu, khi truyền vào tham số với kiểu dữ liệu bất kỳ, trình biên dịch vẫn sẽ tự động hiểu và sử dụng kiểu dữ liệu đó.
 - Và nếu muốn ép kiểu trả về, ta sẽ ép kiểu hằng sau hàm với cú pháp function<dataType>()
 - Lấy ví dụ:
@@ -99,6 +100,9 @@ T square(T1 x)
 {
     return x * x;
 }
+
+template <typename A = int, typename B> //Lỗi vì B không được phép không có mặc định nếu A có mặc định, nếu muốn có thể đổi thứ tự <typename B, typename A = int>
+...
 
 int main()
 {
@@ -116,6 +120,123 @@ output
 20
 20.25
 ```
+
+## Các cơ chế của Template
+- Để có thể hiểu sâu hơn về Template, ta cần nắm các cơ chế của template với các ví dụ của function template.
+- Các cơ chế:
+  - **Deduction**: Compiler tự suy
+
+```cpp
+template<typename T>
+void print(T value) {
+    cout << "T is: " << typeid(T).name() << endl;
+}
+
+print(42);        // T = int  ← compiler **deduces** T
+print(3.14);      // T = double
+```
+
+  - **Explicit Instantiation:** Bạn chỉ rõ hay có thể hiểu là bạn đang ép kiểu cho nó.
+
+```cpp
+template <typename T = int, typename T1 = int>
+T return_a(T1 a)
+{
+  return a*a;
+}
+
+return_a<double>(4); //Trả về 16.0
+```
+
+- Tuy nhiên, hiểu rõ hơn một chút, đối với ví dụ trên, thực chất đã xảy ra 2 cơ chế.
+- Có khi nào bạn đặt câu hỏi nếu như ta chỉ định <double> như vậy thì liệu khi tính toán, T1 là kiểu dữ liệu gì? Liệu nó có phải là double*double.
+- Câu trả lời là **không**, khi chúng ta truyền tham số vào T1 a, thì khi này đã xảy ra cơ chế **Deduction**, trình biên dịch đã tự suy T1 là int thì nó sẽ mãi là int, không thể bị ép kiểu nữa.
+Hay nói cách khác, thứ bị ép kiểu là T vì nó đang không được chỉ định hay tự suy, hàm sẽ hoạt động như kiểu là (double)(int*int).
+- Điều này cũng đúc kết được một điều rằng là các cơ chế sẽ hoạt động riêng biệt, tức là chúng không được phép tác động lên nhau.
+- Và nếu như hàm không có gì để chỉ định hay suy luận, thì nó sẽ xét đến **số lượng biến typename**.
+- Lấy ví dụ rõ hơn:
+
+```
+#include <iostream>
+using namespace std;
+
+template <typename T>
+void print()
+{
+    T a;
+    cout << "Kiểu dữ liệu của T là: " << typeid(a).name() << endl;
+}
+
+template <typename T, typename T1 = int>
+void print_a(T1 a)
+{
+    T b;
+    cout << "Kiểu dữ liệu của T1 sau khi đã được deduced là: " << typeid(a).name() << endl;
+    cout << "Kiểu dữ liệu của T là: " << typeid(b).name() << endl;
+}
+
+template <typename T>
+void display()
+{
+    cout << "Đây là hàm 1 biến!" << endl;
+}
+
+template <typename T, typename T1>
+void display()
+{
+    cout << "Đây là hàm 2 biến!" << endl;
+}
+
+int main()
+{
+    // Kiểm tra tính độc lập của cơ chế
+    cout << "=== Kiểm tra tính độc lập ===" << endl;
+    print<int>();
+    print<double>();
+
+    cout << endl;
+
+    print_a<double>(12);
+    print_a<int>(3.5);
+
+    cout << endl;
+
+    cout << "=== Kiểm tra nếu đếm số lượng biến ===" << endl;
+    
+    // Kiểm tra nếu đếm số lượng biến
+    display<int>();
+    display<double>();
+
+    cout << endl;
+
+    display<int, double>();
+    display<int, int>();
+    return 0;
+}
+
+```
+
+output
+
+```
+=== Kiểm tra tính độc lập ===
+Kiểu dữ liệu của T là: i
+Kiểu dữ liệu của T là: d
+
+Kiểu dữ liệu của T1 sau khi đã được deduced là: i
+Kiểu dữ liệu của T là: d
+Kiểu dữ liệu của T1 sau khi đã được deduced là: d
+Kiểu dữ liệu của T là: i
+
+=== Kiểm tra nếu đếm số lượng biến ===
+Đây là hàm 1 biến!
+Đây là hàm 1 biến!
+
+Đây là hàm 2 biến!
+Đây là hàm 2 biến!
+```
+
+  - **Specialization:** Chuyên biệt hóa - Chúng ta sẽ tìm hiểu kỹ hơn ở bên dưới.
 
 ## 2.2 Class Template
 - Class templates trong C++ là một khái niệm tương tự như function templates, nhưng được áp dụng cho class thay vì function. Class templates cho phép tạo các class có thể làm việc với nhiều kiểu dữ liệu mà không cần viết lại code.
@@ -159,5 +280,78 @@ int main(int argc, char const *argv[]){
     stateSensor.display();
     return 0;
 }
+
+```
+
+## 2.3 Template Specialization - Chuyên Biệt Hóa
+- 
+
+- Template chuyên biệt hóa (Template Specialization) trong C++ cho phép tùy chỉnh hành vi của template cho một kiểu dữ liệu cụ thể.
+- Cú pháp:
+
+```cpp
+template <>
+class name_of_class<data_type>
+{
+    private:
+        data_type var;
+}
+```
+
+- Khi sử dụng Chuyên Biệt Hóa Template ta cần có một hàm tổng quát trước.
+- Lấy ví dụ:
+
+```cpp
+template<>
+void A<int>(){}; //Báo lỗi
+
+template <typename T>
+void B(){};
+
+template <>
+void B<int>(){}; //Không báo lỗi
+```
+
+- Lấy một ví dụ cụ thể:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+// Template tổng quát
+template <typename T>
+void display(T value){
+    cout << "Generic: " << value << endl;
+}
+
+// Chuyên biệt hóa cho kiểu `int`
+template <>
+void display<int>(int value){
+    cout << "Specialized for int: " << value << endl;
+}
+
+// Chuyên biệt hóa cho kiểu `char*`
+template <>
+void display<char*>(char* value){
+    cout << "Specialized for string: " << value << endl;
+}
+
+int main(){
+    display(42);        // Sử dụng chuyên biệt hóa cho int
+    display(3.14);      // Sử dụng template tổng quát
+    display("Hello");   // Sử dụng chuyên biệt hóa cho char*
+    return 0;
+}
+```
+
+- Nhìn vào ví dụ trên, câu hỏi đặt ra là vậy việc sử dụng chuyên biệt hóa khác gì với sử dụng hàm/phương thức bình thường.
+- Câu trả lời đó chính là không có sự khác biệt NHƯNG chỉ đối với các trường hợp đơn giản trên thôi. Khi ta sử dụng với các toán tử phức tạp hơn, điển hình như varadic.
+- Varadic như đã tìm hiểu ở các nội dung trước, nó cho phép ta điền số lượng tham số không cụ thể. Đối với class cũng vậy, nó cũng có một khái niệm tên varadic template.
+
+## Varadic Template
+- Variadic Template cho phép bạn tạo các hàm template hoặc lớp template có thể nhận một số lượng tham số không xác định. Điều này giúp bạn viết mã linh hoạt hơn khi làm việc với danh sách tham số có kích thước động.
+- Lấy ví dụ:
+
+```cpp
 
 ```
