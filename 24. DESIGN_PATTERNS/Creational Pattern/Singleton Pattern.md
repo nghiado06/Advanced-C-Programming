@@ -53,7 +53,7 @@ public:
 
         if (instance == nullptr) {
             cout << "[Logger] instance chưa có -> tạo mới\n";
-            instance = new Logger();
+            instance = new Logger(); //Gán biến instace cho object được tạo ra lần đầu tien
         } else {
             cout << "[Logger] instance đã tồn tại -> trả về instance cũ\n";
         }
@@ -87,6 +87,31 @@ int main() {
 
     return 0;
 }
-
 ```
+
+- Trước tiên hãy cùng làm rõ khái niệm instance (thể hiện). Có thể hiểu đơn giản rằng instance và object là một, nhưng khi nói đến instance người ta sẽ hiểu rằng mình đang nhấn mạnh tính **duy nhất** trong singleton pattern.
+- Bây giờ hãy cũng phân tích kỹ hơn:
+    - Khởi tạo instance: chúng ta dùng từ khóa static có hai mục đích:
+      - Đây là biến của **toàn class**.
+      - Biến này chỉ truy cập được bằng static method.
+      - Static Method cũng chỉ truy cập được biến static.
+    - Chúng ta sử dụng con trỏ nhằm lưu địa chỉ của đối tượng khi khởi tạo lần đầu tiên. Tức là đối với singleton pattern, chúng ta sẽ khởi tạo một đối tượng, và đối tượng này chỉ được khởi tạo bằng static method, và ta
+sẽ gán địa chỉ của object đó cho biến instance, vậy là instance đã trở thành object và ta không thể tạo thêm một object nào khác nữa.
+    - Hãy cùng xem output của đoạn code trên:
+    ```cpp
+    == Gọi logger1 lần đầu ==
+    [Logger] getInstance() được gọi.
+    [Logger] instance chưa có -> tạo mới
+    [Logger] Constructor được gọi -> Logger được tạo ra!
+    [Log] Ghi log lần 1
+    
+    == Gọi logger2 lần hai ==
+    [Logger] getInstance() được gọi.
+    [Logger] instance đã tồn tại -> trả về instance cũ
+    [Log] Ghi log lần 2
+    
+    == So sánh logger1 và logger2 ==
+    Cùng một thể hiện Logger!
+    ```
+
 
