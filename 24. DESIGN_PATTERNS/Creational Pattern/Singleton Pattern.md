@@ -278,7 +278,7 @@ std::mutex mtx;
   }
   ```
 
-  - std::lock_guard<std::mutex> lock(mtx); : RALL Style - tự động lock khi tạo và unclock khi ra khởi scope - Đây là cách an toàn và được khuyên dùng nhất.
+  - std::lock_guard<std::mutex> lock(mtx); : RALL Style - tự động lock khi tạo và unclock khi ra khởi scope - Đây là cách an toàn và được khuyên dùng nhất vì nếu lock và unlock thủ công có thể làm ta dễ quên.
 
   ```cpp
   void printSafe(string msg) {
@@ -286,3 +286,277 @@ std::mutex mtx;
     cout << msg << endl;          // tự unlock khi ra khỏi hàm
   }
   ```
+
+- Quay trở lại với singleton pattern, vì sao ta lại cần dùng mutex?
+- Trong lazy initialization, ta có đoạn:
+
+```cpp
+if (instance == nullptr) {
+    instance = new Singleton();
+}
+```
+
+- Nếu 2 thread chạy cùng lúc, cả hai thấy nullptr --> Cùng tạo --> Vi phạm Singleton --> Cần mutex để ngăn chặn 1 thread tạo khi thread khác đang tạo.
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+#include <mutex>
+using namespace std;
+
+class Logger {
+private:
+    static Logger* instance;
+    static mutex mtx;
+
+    Logger() {
+        cout << "[Logger] Logger được tạo!\n";
+    }
+
+public:
+    static Logger* getInstance() {
+        cout << "[getInstance] Được gọi.\n";
+
+        lock_guard<mutex> lock(mtx);  // TỰ ĐỘNG LOCK
+
+        if (instance == nullptr) {
+            cout << "[getInstance] Chưa có instance → tạo mới\n";
+            instance = new Logger();
+        } else {
+            cout << "[getInstance] Đã có instance → dùng lại\n";
+        }
+
+        return instance;
+    }
+
+    void log(string msg) {
+        cout << "[Log] " << msg << endl;
+    }
+};
+
+Logger* Logger::instance = nullptr;
+mutex Logger::mtx;
+```
+
+## STATIC LOCAL VARIABLE
+- Mục tiêu của việc sử dụng biến static cục bộ để tạo thread-safe để khởi tạo trễ nhưng vẫn tự động an toàn với đa luồng và không cần mutex thủ công bằng cách kết hợp tham chiết trong C++
+- **Ưu điểm:**
+  - Thread-safe tự động mà không cần mutex
+  - Gọn và sạch
+  - Không bị memory leak vì không cần cấp phát động
+- **Nhược điểm:**
+  - Không kiểm soát được thời gian hủy nếu cần quản lý vòng đời chi tiết (thực chất điều này cũng hiếm khi cần).
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Logger {
+private:
+    Logger() {
+        cout << "[Logger] Constructor → Logger được tạo!\n";
+    }
+
+public:
+    static Logger& getInstance() {
+        static Logger instance;  // Biến static cục bộ
+        return instance;
+    }
+
+    void log(string msg) {
+        cout << "[Log] " << msg << endl;
+    }
+};
+```
+- Tới đây có lẽ nhiều người vẫn sẽ thắc mắc rằng nếu nó tạo cục bộ như vậy thì nó sẽ an toàn chỗ nào?.
+- Thực chất trình biên dịch sẽ tự tạo cơ chế đồng bộ (synchronization) phía sau để:
+  - Đảm bảo instance chỉ được khởi tạo đúng 1 lần duy nhất.
+  - Nếu nhiều thread cùng vào các thread khác sẽ chờ đến khi thread đầu tiên khởi tạo xong.
+- Trình biên dịch sẽ tạo ra một flag để kiểm tra xem biến đã được khởi tạo chưa (is_initialized).
+- Hoặc dùng một chơ chế mutex hoặc atomic guard được ẩn đi.
+
+- Ví dụ mô phỏng ý tưởng bên trong, tất nhiên bạn chẳng cần viết như vậy vì trình biên dịch đã tự lo sẵn:
+
+```cpp
+static bool is_initialized = false;
+static mutex mtx;
+
+Logger& getInstance() {
+    lock_guard<mutex> lock(mtx);     // ẩn trong compiler
+    if (!is_initialized) {
+        static Logger instance;      // thực chất tạo ở đây
+        is_initialized = true;
+        return instance;
+    }
+    return instance;
+}
+```
+
+## DOUBLE-CHECKED LOCKING (DCL)
+- Mục tiêu của DCL chính là tối ưu hóa lazy trong môi trường đa luồng bằng cách chỉ khóa (lock) khi thực sự cần thiết, tức là:
+  - Không khóa mỗi lần gọi getInstance
+  - Nhưng vẫn đảm bảo thread-safe
+  - Đặt vấn đề
+    - Lazy Singleton đơn giản:
+    ```cpp
+    if (instance == nullptr) {
+    instance = new Singleton();
+    }
+    ```
+    --> Không thread-safe
+    - Thread-safe bằng mutex:
+    ```cpp
+    lock_guard<mutex> lock(mtx);
+    if (instance == nullptr)
+      instance = new Singleton();
+    ```
+    --> Luôn bị lock mỗi lần gọi getInstance() mặc dù instance đã tồn tại --> Hiệu năng thấp.
+
+==> Vậy thì DCL sinh ra chính là để giải quyết tất cả bằng cách kiểm tra 2 lần.
+- Ý tưởng của DCL:
+  - Lần 1: Kiểm tra instance == nullptr trước khi lock. --> Nếu đã tồn tại thì không lock nữa mà trả luôn.
+  - Lần 2: Nếu vẫn chưa tồn tại --> Lock lại --> Kiểm tra lần nữa rồi mới tạo
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+#include <mutex>
+using namespace std;
+
+class Logger {
+private:
+    static Logger* instance;
+    static mutex mtx;
+
+    Logger() {
+        cout << "[Logger] Logger được tạo!\n";
+    }
+
+public:
+    static Logger* getInstance() {
+        if (instance == nullptr) {  // Check 1 - không đồng bộ
+            lock_guard<mutex> lock(mtx);  // Khóa khi cần
+            if (instance == nullptr) {    // Check 2 - đã khóa
+                instance = new Logger();
+            }
+        }
+        return instance;
+    }
+
+    void log(string msg) {
+        cout << "[Log] " << msg << endl;
+    }
+};
+
+// Khởi tạo biến tĩnh
+Logger* Logger::instance = nullptr;
+mutex Logger::mtx;
+
+```
+- Phân tích kỹ flow của nó:
+  - Thời điểm 1: Thread A gọi getInstance()
+  
+  ```cpp
+  if (instance == nullptr) // Đúng vì chưa tạo --> A tiến vào trong khối if để tạo Singleton
+  ```
+  
+  - Thời điểm 2: Thread B gọi getInstance() gần như cùng lúc với A
+  
+  ```cpp
+  if (instance == nullptr) // B cũng thấy nullptr --> B cũng vào trong if
+  ```
+
+  - Cả 2 thread đều đến dòng lock_guard<mutex> lock()mtx;
+  - Thread A lấy được mutex trước --> Vào trong
+  - Đến dòng:
+
+  ```cpp
+  if (instance == nullptr)  // vẫn đúng
+    instance = new Singleton(); // Khởi tạo luôn
+  ```
+  - Thread B vào sau bị mtx giữ chờ đến khi A xong thì B mới tiến vào kiểm tra:
+
+  ```cpp
+  if (instance == nullptr)  // Phát hiện đã khởi tạo rồi --> Không khởi tạo nữa mà chỉ trả về instance. Nếu không có điều kiện kiểm tra lần 2 thì thread B sẽ tạo thêm một instance mới --> Không còn là singleton nữa
+    instance = new Singleton(); 
+  ```
+
+  - **Ưu điểm:**
+    - Tối ưu hiệu năng, chỉ tạo lock khi thực sự cần tạo instance
+    - An toàn đa luồng
+    - Không lock ở mọi lần gọi
+
+## ÁP DỤNG THỰC TẾ
+- Chúng ta sẽ cùng nhất lấy một ví dụ áp dụng singleton trong lập trình vi điều khiển.
+- Các bạn có thể vận dụng các lý thuyết vừa rồi và phân tích cách chương trình hoạt động nhé.
+
+```cpp
+#include <iostream>
+#include "stm32f10x.h"  
+using namespace std;
+
+class UART{
+    private:
+        static UART* instance;  
+        UART(){ initUART(); }
+
+        void initUART(){
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+            USART_InitTypeDef USART_InitStructure;
+
+            USART_InitStructure.USART_BaudRate = 9600;
+            USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+            USART_InitStructure.USART_StopBits = USART_StopBits_1;
+            USART_InitStructure.USART_Parity = USART_Parity_No;
+            USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+            USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+
+            USART_Init(USART1, &USART_InitStructure);
+            USART_Cmd(USART1, ENABLE);
+        }
+
+    public:
+        static UART* getInstance(){
+            if (instance == nullptr){
+                instance = new UART();  // Tạo instance nếu chưa có
+            }
+            return instance;
+        }
+
+        void sendData(uint8_t data){
+            while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+            USART_SendData(USART1, data);
+        }
+
+        uint8_t receiveData(){
+            while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+            return USART_ReceiveData(USART1);
+        }
+};
+
+UART* UART::instance = nullptr;
+
+int main(){
+    UART* uart = UART::getInstance();
+
+    // Gửi một ký tự qua UART
+    uart->sendData('H');
+
+    // Nhận một ký tự từ UART
+    uint8_t received = uart->receiveData();
+
+    while (1){
+        // Thực hiện công việc liên quan khác
+    }
+}
+```
+
+
+## TỔNG KẾT
+- Vậy là chúng ta đã tìm hiểu được cơ bản cách sử dụng singleton và các biến thể sử dụng trong các trường hợp nhất định.
+
+
+
+
+
