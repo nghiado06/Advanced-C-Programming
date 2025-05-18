@@ -114,4 +114,175 @@ sẽ gán địa chỉ của object đó cho biến instance, vậy là instance
     Cùng một thể hiện Logger!
     ```
 
+# CÁC BIẾN THỂ CỦA SINGLETON PATTERN
+- Singleton có các biến thể như: Eager initialization, Lazy Initialization, Thread Safe, Double Check Locking.
+- Các biến thể này cũng chỉ có một mục đích đó là tạo một instance duy nhất, những sẽ khác cách khởi tạo biến instance này để phù hợp cho từng trường hợp ứng dụng.
+- Bây giờ chúng ta sẽ cùng tìm hiểu từng biến thể.
 
+## EAGER INITIALIZATION (KHỞI TẠO SỚM)
+- Như cái tên của mình, mục tiêu của eager initialization chính là khởi tạo biến instance **từ sớm** , hay nói cách khác là nó sẽ khởi tạo biến instance ngay từ lúc bắt đầu run chương trình, trước cả khi nó được
+ sử dụng. Tức là nói dân giã thì nó **nôn nóng** khởi tạo từ sớm dùng chưa biết có dùng tới hay không.
+- **Ưu điểm:**
+  - Đơn giản: Không cần kiểm tra nullptr, không cần new
+  - An toàn trong môi trường đa luồng vì được khởi tạo sẵn từ đầu --> Không có race condition
+- **Nhược điểm**:
+  - Có thể lãng phí tài nguyên nếu singleton chưa bao giờ được dùng đến
+  - Không linh hoạt vì khó kiểm soát được thời điểm khởi tạo
+
+- Lấy ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Logger {
+private:
+    static Logger instance; // tạo ngay từ khi chương trình khởi động
+    Logger() {
+        cout << "[Logger] Constructor được gọi -> Logger được tạo!\n";
+    }
+
+public:
+    static Logger& getInstance() {
+        return instance;  // trả về tham chiếu tới thể hiện đã có sẵn
+    }
+
+    void log(string message) {
+        cout << "[Log] " << message << endl;
+    }
+};
+
+// Phần bắt buộc: khởi tạo biến tĩnh ở ngoài class
+Logger Logger::instance;  // <- được gọi NGAY KHI chương trình bắt đầu
+```
+
+- Trong C++ thì đối với eager việc ta có thể lược qua việc kiểm tra điều kiện tồn tại, nên ta có thể sử dụng luôn việc khởi tạo bằng biến thông thường và kết hợp với reference để tối ưu hóa bộ nhớ.
+- Ta vẫn có thể sử dụng con trỏ đối với eager nhưng điều đó sẽ làm ta tiêu tốn thêm vùng nhớ heap cho con trỏ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Logger {
+private:
+    static Logger* instance = new Logger(); // tạo ngay từ khi chương trình khởi động
+    Logger() {
+        cout << "[Logger] Constructor được gọi -> Logger được tạo!\n";
+    }
+
+public:
+    static Logger* getInstance() {
+        return instance;  // trả về tham chiếu tới thể hiện đã có sẵn
+    }
+
+    void log(string message) {
+        cout << "[Log] " << message << endl;
+    }
+};
+
+// Phần bắt buộc: khởi tạo biến tĩnh ở ngoài class
+Logger* Logger::instance;  // <- được gọi NGAY KHI chương trình bắt đầu
+```
+
+- Các ví dụ thực tế dùng eager:
+
+  - Ghi log khởi động hệ thống
+  - Khởi tạo hệ thống cấu hình mặc định
+  - Quản lý quyền truy cập vào thiết bị phần cứng (driver) luôn bật từ đầu.
+
+## LAZY INITIALIZATION (KHỞI TẠO TRỄ)
+- Ngược lại với eager, thì lazy hướng đến mục tiêu chỉ tạo đối tượng khi lần đầu cần dùng đến chứ không tạo từ đầu chương trình.
+- Điều này sẽ giúp tiết kiệm bộ nhớ tài nguyên và đặc biệt nếu singleton chiếm nhiều tài nguyên mà chưa chắc đã cần đến.
+- **Ưu điểm:**
+  - Tiết kiệm tài nguyên vì sẽ không tạo nếu không cần
+  - Kiểm soát được thời điểm khởi tạo
+- **Nhược điểm:**
+  - Không an toàn trong đa luồng nếu không được xử lý. Giả định như nếu 2 thread cùng gọi getInstance cùng lúc nullptr thì sẽ tạo ra 2 đối tượng.
+  - Cần thêm code để đồng bộ hoặc bảo vệ.
+
+- Ví dụ:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Logger {
+private:
+    static Logger* instance;  // con trỏ tới thể hiện duy nhất
+    Logger() {
+        cout << "[Logger] Constructor được gọi → Logger được tạo!\n";
+    }
+
+public:
+    static Logger* getInstance() {
+        cout << "[Logger] getInstance() được gọi.\n";
+
+        if (instance == nullptr) {
+            cout << "[Logger] instance chưa có → tạo mới\n";
+            instance = new Logger();
+        } else {
+            cout << "[Logger] instance đã tồn tại → dùng lại\n";
+        }
+
+        return instance;
+    }
+
+    void log(string message) {
+        cout << "[Log] " << message << endl;
+    }
+};
+
+// Gán instance ban đầu là nullptr
+Logger* Logger::instance = nullptr;
+```
+
+- Đây chính là ví dụ ban đầu mà chúng ta đã dùng, nó sẽ thêm điều kiện kiểm tra if nullptr và chỉ khởi tạo nếu nó không phải null, tức là khi chưa được khởi tạo.
+
+## THREAD-SAFE
+- Như đã nói ở trên, đối với lazy initialization sẽ rất nguy hiểm khi làm việc trong môi trường đa luồng nếu không được kiểm tra xử lý đúng cách.
+- Chính vì thế các tác giả của design patterns đã phát minh ra các biến thể thread-safe để giải quyết vấn đề đa luồng đó.
+- Trong đó có 3 giải pháp chính:
+  - Sử dụng mutex
+  - Sử dụng static local variable
+  - Sử dụng double-checked locking (Tối ưu)
+- Vậy bây giờ chúng ta hãy cùng phân tích khái niệm và ưu nhược điểm của nó nhé.
+
+### MUTEX
+- Trước tiên hãy làm rõ mutex là gì?
+- mutex là một đối tượng khóa (lock) trong C++ nằm trong thư viện <mutex> dùng để đồng bộ (synchronization) giữa các luồng (thread) khi cùng truy cập vào một tài nguyên chia sẻ như:
+  - Biến toàn cục
+  - File
+  - Database
+  - Singleton Instance
+
+ - Mục tiêu của mutex đó chính là đảm bảo chỉ có 1 thread được phép vào "vùng nguy hiểm" tại một thời điểm duy nhất, còn các thread khác phải chờ.
+- Cú pháp khai báo:
+
+```cpp
+#include <mutex>
+
+std::mutex mtx;
+```
+
+-  Các thao tác chính với mutex:
+  - mtx.lock(): thread gọi lock đầu tiên sẽ “giữ khóa”. Các thread khác sẽ chờ.
+  - mtx.unlock(): trả khóa cho các thread khác dùng
+
+  ```cpp
+  std::mutex mtx;
+  
+  void printSafe(string msg) {
+      mtx.lock();
+      cout << msg << endl;
+      mtx.unlock();
+  }
+  ```
+
+  - std::lock_guard<std::mutex> lock(mtx); : RALL Style - tự động lock khi tạo và unclock khi ra khởi scope - Đây là cách an toàn và được khuyên dùng nhất.
+
+  ```cpp
+  void printSafe(string msg) {
+    lock_guard<mutex> lock(mtx);  // auto lock
+    cout << msg << endl;          // tự unlock khi ra khỏi hàm
+  }
+  ```
