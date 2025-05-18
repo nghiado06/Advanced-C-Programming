@@ -23,3 +23,70 @@
 # PHÂN TÍCH KIẾN THỨC
 - Đó là các khái niệm của singleton pattern. Nhưng hẳn ai ban đầu khi đọc vào cũng sẽ chẳng hiểu gì. Thế nên bây giờ chúng ta sẽ cùng phân tích chi tiết từng ý một.
 
+## Đặt vấn đề
+- Trước tiên hãy bắt đẩu với câu hỏi tại sao lại cần dùng đến Singleton Pattern?
+- Đặt vấn đề khi lập trình vi điều khiển với các chân GPIO, Timer,.. Mỗi chân này đều có địa chỉ cố định, vậy thì khi ta làm việc với các chân đó, ta sẽ tạo các object để ghi những giá trị lên
+các địa chỉ cố định này, vậy thì khi này việc tạo nhiều object mà chỉ ghi giá trị lên cùng một địa chỉ thì nó sẽ bị tiêu tốn tài nguyên bộ nhớ của chúng ta.
+- Vậy nên singleton sẽ giúp chúng ta tạo ra nhiều object nhưng các object đó chỉ dùng chung một địa chỉ duy nhất mà thôi, nó sẽ giúp tối ưu bộ nhớ chương trình hơn rất nhiều.
+
+## Phân tích các khái niệm
+- Tiếp theo chúng ta sẽ đi đến câu hỏi cái này là gì và có tác dụng gì?
+- Đầu tiên hãy nhìn vào một đoạn code của singleton pattern.
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Logger {
+private:
+    static Logger* instance;
+
+    // Constructor private -> không cho new từ bên ngoài
+    Logger() {
+        cout << "[Logger] Constructor được gọi -> Logger được tạo ra!\n";
+    }
+
+public:
+    static Logger* getInstance() {
+        cout << "[Logger] getInstance() được gọi.\n";
+
+        if (instance == nullptr) {
+            cout << "[Logger] instance chưa có -> tạo mới\n";
+            instance = new Logger();
+        } else {
+            cout << "[Logger] instance đã tồn tại -> trả về instance cũ\n";
+        }
+
+        return instance;
+    }
+
+    void log(string message) {
+        cout << "[Log] " << message << endl;
+    }
+};
+
+// Khởi tạo con trỏ static ban đầu = nullptr
+Logger* Logger::instance = nullptr;
+
+int main() {
+    cout << "== Gọi logger1 lần đầu ==\n";
+    Logger* logger1 = Logger::getInstance();
+    logger1->log("Ghi log lần 1");
+
+    cout << "\n== Gọi logger2 lần hai ==\n";
+    Logger* logger2 = Logger::getInstance();
+    logger2->log("Ghi log lần 2");
+
+    cout << "\n== So sánh logger1 và logger2 ==\n";
+    if (logger1 == logger2) {
+        cout << "Cùng một thể hiện Logger!\n";
+    } else {
+        cout << "Logger bị tạo nhiều lần!\n";
+    }
+
+    return 0;
+}
+
+```
+
