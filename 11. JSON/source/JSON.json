@@ -1,0 +1,10 @@
+{
+    "name": "Do Duc Nghia",
+    "age": 30,
+    "city": "SaiGon",
+    "grade": [
+        10,
+        9,
+        6
+    ]
+}
